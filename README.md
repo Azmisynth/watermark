@@ -1,4 +1,4 @@
-# Image Watermarking — LSB Method
+# Image Watermarking (LSB Method)
 
 This project implements a simple **spatial domain watermarking** technique on a face photo. The goal is to understand the fundamentals of digital watermarking: how to hide information inside an image, and what happens to that hidden information when the image gets compressed.
 
@@ -6,7 +6,7 @@ This project implements a simple **spatial domain watermarking** technique on a 
 
 ## Method: Least Significant Bit (LSB) Substitution
 
-The idea behind LSB watermarking is straightforward. Every pixel in a digital image is stored as an 8-bit integer (0 to 255). Out of those 8 bits, the last one (bit 0) only contributes a difference of 1 gray level — practically invisible to the human eye. So we can replace that last bit with our watermark data without visually changing the image.
+The idea behind LSB watermarking is straightforward. Every pixel in a digital image is stored as an 8-bit integer (0 to 255). Out of those 8 bits, the last one (bit 0) only contributes a difference of 1 gray level, practically invisible to the human eye. So we can replace that last bit with our watermark data without visually changing the image.
 
 **Embedding formula:**
 ```
@@ -56,7 +56,7 @@ Because the cover image is 1280×960 and the watermark is only 64×64, the embed
 
 ## Evaluating Robustness Against JPEG Compression
 
-After embedding, the watermarked image is saved as JPEG at 10 different quality factors: 100, 90, 80, 70, 60, 50, 40, 30, 20, and 10. For each, we extract the watermark back out and measure the **Bit Error Rate (BER)** — how many extracted bits are wrong compared to the original watermark.
+After embedding, the watermarked image is saved as JPEG at 10 different quality factors: 100, 90, 80, 70, 60, 50, 40, 30, 20, and 10. For each, we extract the watermark back out and measure the **Bit Error Rate (BER)**, how many extracted bits are wrong compared to the original watermark.
 
 - BER = 0.0 means perfect extraction, every bit is correct
 - BER = 0.5 means the extracted data is pure random noise, completely unrelated to the watermark
@@ -103,7 +103,7 @@ Looking at the extracted patterns at different quality factors:
   <em>Original &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QF=100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QF=90 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QF=10</em>
 </p>
 
-One thing worth noting: at QF=100, the extracted image *looks* similar to the original visually — both appear as random noise. But the BER of 0.40 tells a different story. Random noise tends to look like random noise regardless of whether it matches the original or not, so visual inspection is misleading here. BER is the right tool for measuring this.
+One thing worth noting: at QF=100, the extracted image *looks* similar to the original visually, both appear as random noise. But the BER of 0.40 tells a different story. Random noise tends to look like random noise regardless of whether it matches the original or not, so visual inspection is misleading here. BER is the right tool for measuring this.
 
 At QF=10, the extracted pattern looks like horizontal streaks rather than random noise. This happens because heavy JPEG compression introduces block artifacts that create a specific low-frequency pattern in the LSBs, rather than the random pattern we put in.
 
@@ -116,17 +116,6 @@ JPEG compression works in three steps: it converts the image to frequency domain
 Even at the maximum quality factor (QF=100), JPEG is still lossy — it still rounds some coefficients, which still flips some LSBs. The watermark starts degrading the moment you save to JPEG, long before you touch a lower quality setting.
 
 This is why LSB is described as a **fragile watermarking** scheme. It is not designed to survive compression at all. It is the simplest possible way to embed data invisibly, which makes it a good starting point to learn the concept, but not practical for real-world use where images typically get re-compressed multiple times.
-
----
-
-## How to Run
-
-```bash
-pip install Pillow numpy matplotlib
-python watermark.py
-```
-
-Results are saved to the `results/` folder. The script prints a BER line for each quality factor and generates `results/ber_vs_qf.png` with the full comparison plot.
 
 ---
 
