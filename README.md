@@ -161,6 +161,57 @@ From QF=90 downward, BER locks at ≈ 0.50 across all quality factors, statistic
 
 ---
 
+## Watermarked Images at Each Quality Factor
+
+The same selfie saved as JPEG at each quality factor after watermark embedding. Notice how the photo degrades visually as QF drops, while the watermark was already destroyed long before the image looks bad.
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="results/watermarked_qf100.jpg" width="160"/><br/>
+      <em>QF=100</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf90.jpg" width="160"/><br/>
+      <em>QF=90</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf80.jpg" width="160"/><br/>
+      <em>QF=80</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf70.jpg" width="160"/><br/>
+      <em>QF=70</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf60.jpg" width="160"/><br/>
+      <em>QF=60</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="results/watermarked_qf50.jpg" width="160"/><br/>
+      <em>QF=50</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf40.jpg" width="160"/><br/>
+      <em>QF=40</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf30.jpg" width="160"/><br/>
+      <em>QF=30</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf20.jpg" width="160"/><br/>
+      <em>QF=20</em>
+    </td>
+    <td align="center">
+      <img src="results/watermarked_qf10.jpg" width="160"/><br/>
+      <em>QF=10</em>
+    </td>
+  </tr>
+</table>
+
 ## Why LSB Fails Under JPEG
 
 JPEG compression works in three steps: it converts the image to frequency domain using DCT (Discrete Cosine Transform), quantizes (rounds) the frequency coefficients, then converts back. This rounding process changes pixel values, and since LSBs are the least significant part of those values, they are the first thing to get corrupted.
