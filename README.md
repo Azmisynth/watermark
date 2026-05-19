@@ -1,4 +1,4 @@
-# Image Watermarking — LSB Method
+# Image Watermarking (LSB Method)
 
 This project implements a simple **spatial domain watermarking** technique on a face photo. The goal is to understand the fundamentals of digital watermarking: how to hide information inside an image, and what happens to that hidden information when the image gets compressed.
 
