@@ -6,7 +6,7 @@ This project implements a simple **spatial domain watermarking** technique on a 
 
 ## Method: Least Significant Bit (LSB) Substitution
 
-The idea behind LSB watermarking is straightforward. Every pixel in a digital image is stored as an 8-bit integer (0 to 255). Out of those 8 bits, the last one (bit 0) only contributes a difference of 1 gray level — practically invisible to the human eye. So we can replace that last bit with our watermark data without visually changing the image.
+The idea behind LSB watermarking is straightforward. Every pixel in a digital image is stored as an 8-bit integer (0 to 255). Out of those 8 bits, the last one (bit 0) only contributes a difference of 1 gray level, practically invisible to the human eye. So we can replace that last bit with our watermark data without visually changing the image.
 
 **Embedding formula:**
 ```
@@ -56,7 +56,7 @@ Because the cover image is 1280×960 and the watermark is only 64×64, the embed
 
 ## Evaluating Robustness Against JPEG Compression
 
-After embedding, the watermarked image is saved as JPEG at 10 different quality factors: 100, 90, 80, 70, 60, 50, 40, 30, 20, and 10. For each, we extract the watermark back out and measure the **Bit Error Rate (BER)** — how many extracted bits are wrong compared to the original watermark.
+After embedding, the watermarked image is saved as JPEG at 10 different quality factors: 100, 90, 80, 70, 60, 50, 40, 30, 20, and 10. For each, we extract the watermark back out and measure the **Bit Error Rate (BER)**, how many extracted bits are wrong compared to the original watermark.
 
 - BER = 0.0 means perfect extraction, every bit is correct
 - BER = 0.5 means the extracted data is pure random noise, completely unrelated to the watermark
@@ -80,7 +80,7 @@ After embedding, the watermarked image is saved as JPEG at 10 different quality 
   <img src="results/ber_vs_qf.png" alt="BER vs QF Plot" width="700"/>
 </p>
 
-The drop at QF=100 is the only point where BER falls below 0.5, and even then it sits at 0.40 — meaning 4 out of 10 bits are already wrong. At every other quality factor from 90 downward, BER hovers right at 0.5, which is indistinguishable from random noise.
+The drop at QF=100 is the only point where BER falls below 0.5, and even then it sits at 0.40, meaning 4 out of 10 bits are already wrong. At every other quality factor from 90 downward, BER hovers right at 0.5, which is indistinguishable from random noise.
 
 **The watermark becomes unextractable starting at QF = 90.**
 
@@ -155,9 +155,9 @@ All extracted watermarks compared side-by-side against the original:
   </tr>
 </table>
 
-At QF=100, the extracted image *looks* similar to the original visually — both appear as random noise. But the BER of 0.40 tells a different story. Random noise tends to look like random noise regardless of whether it matches the original or not, so visual inspection is misleading here. BER is the right tool for measuring this.
+At QF=100, the extracted image *looks* similar to the original visually, both appear as random noise. But the BER of 0.40 tells a different story. Random noise tends to look like random noise regardless of whether it matches the original or not, so visual inspection is misleading here. BER is the right tool for measuring this.
 
-From QF=90 downward, BER locks at ≈ 0.50 across all quality factors — statistically identical to flipping a coin, meaning the watermark carries zero recoverable information. At QF=10, the extracted pattern shows horizontal streaks rather than random noise because heavy JPEG block artifacts imprint a structured low-frequency signature onto the LSBs.
+From QF=90 downward, BER locks at ≈ 0.50 across all quality factors, statistically identical to flipping a coin, meaning the watermark carries zero recoverable information. At QF=10, the extracted pattern shows horizontal streaks rather than random noise because heavy JPEG block artifacts imprint a structured low-frequency signature onto the LSBs.
 
 ---
 
@@ -165,7 +165,7 @@ From QF=90 downward, BER locks at ≈ 0.50 across all quality factors — statis
 
 JPEG compression works in three steps: it converts the image to frequency domain using DCT (Discrete Cosine Transform), quantizes (rounds) the frequency coefficients, then converts back. This rounding process changes pixel values, and since LSBs are the least significant part of those values, they are the first thing to get corrupted.
 
-Even at the maximum quality factor (QF=100), JPEG is still lossy — it still rounds some coefficients, which still flips some LSBs. The watermark starts degrading the moment you save to JPEG, long before you touch a lower quality setting.
+Even at the maximum quality factor (QF=100), JPEG is still lossy, it still rounds some coefficients, which still flips some LSBs. The watermark starts degrading the moment you save to JPEG, long before you touch a lower quality setting.
 
 This is why LSB is described as a **fragile watermarking** scheme. It is not designed to survive compression at all. It is the simplest possible way to embed data invisibly, which makes it a good starting point to learn the concept, but not practical for real-world use where images typically get re-compressed multiple times.
 
