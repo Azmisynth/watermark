@@ -1,4 +1,4 @@
-# Image Watermarking (LSB Method)
+# Image Watermarking — LSB Method
 
 This project implements a simple **spatial domain watermarking** technique on a face photo. The goal is to understand the fundamentals of digital watermarking: how to hide information inside an image, and what happens to that hidden information when the image gets compressed.
 
@@ -6,7 +6,7 @@ This project implements a simple **spatial domain watermarking** technique on a 
 
 ## Method: Least Significant Bit (LSB) Substitution
 
-The idea behind LSB watermarking is straightforward. Every pixel in a digital image is stored as an 8-bit integer (0 to 255). Out of those 8 bits, the last one (bit 0) only contributes a difference of 1 gray level, practically invisible to the human eye. So we can replace that last bit with our watermark data without visually changing the image.
+The idea behind LSB watermarking is straightforward. Every pixel in a digital image is stored as an 8-bit integer (0 to 255). Out of those 8 bits, the last one (bit 0) only contributes a difference of 1 gray level — practically invisible to the human eye. So we can replace that last bit with our watermark data without visually changing the image.
 
 **Embedding formula:**
 ```
@@ -56,7 +56,7 @@ Because the cover image is 1280×960 and the watermark is only 64×64, the embed
 
 ## Evaluating Robustness Against JPEG Compression
 
-After embedding, the watermarked image is saved as JPEG at 10 different quality factors: 100, 90, 80, 70, 60, 50, 40, 30, 20, and 10. For each, we extract the watermark back out and measure the **Bit Error Rate (BER)**, how many extracted bits are wrong compared to the original watermark.
+After embedding, the watermarked image is saved as JPEG at 10 different quality factors: 100, 90, 80, 70, 60, 50, 40, 30, 20, and 10. For each, we extract the watermark back out and measure the **Bit Error Rate (BER)** — how many extracted bits are wrong compared to the original watermark.
 
 - BER = 0.0 means perfect extraction, every bit is correct
 - BER = 0.5 means the extracted data is pure random noise, completely unrelated to the watermark
@@ -88,24 +88,76 @@ The drop at QF=100 is the only point where BER falls below 0.5, and even then it
 
 ## Visual Comparison of Extracted Watermarks
 
-Looking at the extracted patterns at different quality factors:
+All extracted watermarks compared side-by-side against the original:
 
-<p align="center">
-  <img src="results/watermark_original.png" alt="Original" width="100"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="results/extracted_qf100.png" alt="QF=100" width="100"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="results/extracted_qf90.png" alt="QF=90" width="100"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="results/extracted_qf10.png" alt="QF=10" width="100"/>
-</p>
-<p align="center">
-  <em>Original &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QF=100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QF=90 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QF=10</em>
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="results/watermark_original.png" width="90"/><br/>
+      <em><b>Original</b></em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf100.png" width="90"/><br/>
+      <em>QF=100</em><br/>
+      <em>BER=0.4038</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf90.png" width="90"/><br/>
+      <em>QF=90</em><br/>
+      <em>BER=0.4973</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf80.png" width="90"/><br/>
+      <em>QF=80</em><br/>
+      <em>BER=0.4995</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf70.png" width="90"/><br/>
+      <em>QF=70</em><br/>
+      <em>BER=0.4929</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf60.png" width="90"/><br/>
+      <em>QF=60</em><br/>
+      <em>BER=0.5046</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="6"><br/></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="results/extracted_qf50.png" width="90"/><br/>
+      <em>QF=50</em><br/>
+      <em>BER=0.4897</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf40.png" width="90"/><br/>
+      <em>QF=40</em><br/>
+      <em>BER=0.5056</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf30.png" width="90"/><br/>
+      <em>QF=30</em><br/>
+      <em>BER=0.5022</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf20.png" width="90"/><br/>
+      <em>QF=20</em><br/>
+      <em>BER=0.4968</em>
+    </td>
+    <td align="center">
+      <img src="results/extracted_qf10.png" width="90"/><br/>
+      <em>QF=10</em><br/>
+      <em>BER=0.4980</em>
+    </td>
+    <td></td>
+  </tr>
+</table>
 
-One thing worth noting: at QF=100, the extracted image *looks* similar to the original visually, both appear as random noise. But the BER of 0.40 tells a different story. Random noise tends to look like random noise regardless of whether it matches the original or not, so visual inspection is misleading here. BER is the right tool for measuring this.
+At QF=100, the extracted image *looks* similar to the original visually — both appear as random noise. But the BER of 0.40 tells a different story. Random noise tends to look like random noise regardless of whether it matches the original or not, so visual inspection is misleading here. BER is the right tool for measuring this.
 
-At QF=10, the extracted pattern looks like horizontal streaks rather than random noise. This happens because heavy JPEG compression introduces block artifacts that create a specific low-frequency pattern in the LSBs, rather than the random pattern we put in.
+From QF=90 downward, BER locks at ≈ 0.50 across all quality factors — statistically identical to flipping a coin, meaning the watermark carries zero recoverable information. At QF=10, the extracted pattern shows horizontal streaks rather than random noise because heavy JPEG block artifacts imprint a structured low-frequency signature onto the LSBs.
 
 ---
 
